@@ -1,0 +1,21 @@
+{
+  "name": "google-oauth-cloudfront-lambda-edge",
+  "version": "1.0.0",
+  "description": "Example simple cloudfront auth with google oauth",
+  "repository": "github:com/Ragnoroct/example-google-oauth-cloudfront-lambda-edge",
+  "main": "",
+  "scripts": {
+    "deploy:synth": "cdk synth --app deploy.js",
+    "deploy": "cdk deploy --app deploy.js"
+  },
+  "author": "Will Bender",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-cdk/aws-cloudfront": "^1.135.0",
+    "@aws-cdk/aws-cloudfront-origins": "^1.135.0",
+    "@aws-cdk/aws-s3": "^1.135.0",
+    "@aws-cdk/core": "^1.135.0",
+    "aws-cdk": "2.1.0",
+    "constructs": "^3.3.165"
+  }
+}
