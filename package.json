@@ -6,7 +6,8 @@
   "main": "",
   "scripts": {
     "deploy:synth": "cdk synth --app cdkApp.js",
-    "deploy": "cdk deploy --app cdkApp.js"
+    "deploy": "cdk deploy --app cdkApp.js",
+    "dev": "sirv public"
   },
   "author": "Will Bender",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "@aws-cdk/aws-s3": "^1.135.0",
     "@aws-cdk/core": "^1.135.0",
     "aws-cdk": "2.1.0",
-    "constructs": "^3.3.165"
+    "constructs": "^3.3.165",
+    "sirv-cli": "^1.0.14"
   }
 }

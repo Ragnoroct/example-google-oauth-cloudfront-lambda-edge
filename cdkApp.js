@@ -25,6 +25,7 @@ class PrivateCloudfrontExampleStack extends cdk.Stack {
 
         // s3 bucket
         const bucket = new s3.Bucket(this, 'WebBucket', {
+            comment: "Example google oauth web bucket",
             blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         });
 
@@ -33,6 +34,7 @@ class PrivateCloudfrontExampleStack extends cdk.Stack {
 
         // cloudfront distribution
         new cloudfront.Distribution(this, 'WebDistribution', {
+            comment: "Example google oauth frontend", 
             defaultBehavior: {
                 origin: s3Origin,
             },
