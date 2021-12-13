@@ -5,8 +5,8 @@
   "repository": "github:com/Ragnoroct/example-google-oauth-cloudfront-lambda-edge",
   "main": "",
   "scripts": {
-    "deploy:synth": "cdk synth --app deploy.js",
-    "deploy": "cdk deploy --app deploy.js"
+    "deploy:synth": "cdk synth --app cdkApp.js",
+    "deploy": "cdk deploy --app cdkApp.js"
   },
   "author": "Will Bender",
   "license": "ISC",
