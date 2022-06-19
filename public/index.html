@@ -3,9 +3,22 @@
 <html>
 <head>
     <title>Example - Cloudfront Google OAuth 2.0</title>
+    <meta name="google-signin-client_id" content="463482814474-bq5nq9n8kpko0tct4hljs6oni562tg4u.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        }
+    </script>
 </head>
 <body>
     <h2>Example - Cloudfront Google OAuth 2.0</h2>
+    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <h3>Secret Recipes</h3>
     <a href="/private/recipe-1.html">secret recipe 1</a>
     <a href="/private/recipe-2.html">secret recipe 2</a>
 </body>
