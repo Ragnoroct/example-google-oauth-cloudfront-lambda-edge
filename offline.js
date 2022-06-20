@@ -1,7 +1,8 @@
 import { readFile } from "node:fs/promises"
 import http from "node:http"
-import path from "node:path"
+import path, { resolve } from "node:path"
 import { URL } from "node:url"
+import { main as handlerMain } from "./handler.js"
 
 startOfflineServer(8080)
 
@@ -32,7 +33,61 @@ async function requestListener(req, res) {
  * @param {http.IncomingMessage} req
  * @param {http.ServerResponse} res
  */
+async function simulateAwsEventLambdaEdgeViewerRequest(req, res) {
+    const parsedUrl = new URL(req.url, `http://${req.headers.host}`)
+
+    /** @type {AWSLambda.CloudFrontRequestEvent} */
+    const event = {}
+    /** @type {AWSLambda.Context} */
+    const context = {}
+
+    /**
+     * @param {http.IncomingMessage} req
+     */
+    const getCloudfrontHeadersObject = (req) => {
+        const cloudfrontHeaders = {}
+        for (let i = 0; i + 1 < req.rawHeaders.length; i += 2) {
+            const headerName = req.rawHeaders[i]
+            const headerValue = req.rawHeaders[i + 1]
+            const headerNameLower = headerName.toLowerCase()
+
+            if (!cloudfrontHeaders[headerNameLower]) {
+                cloudfrontHeaders[headerNameLower] = []
+            }
+
+            cloudfrontHeaders[headerNameLower].push({ key: headerName, value: headerValue })
+        }
+        return cloudfrontHeaders
+    }
+
+    // only fill in what we need
+    event.Records = [
+        {
+            cf: {
+                request: {
+                    uri: parsedUrl.pathname,
+                    querystring: parsedUrl.search, // don't know if query string includes ? or not. URL.search includes it
+                    method: req.method,
+                    headers: getCloudfrontHeadersObject(req),
+                },
+            },
+        },
+    ]
+
+    const result = await handlerMain(event, context)
+}
+
+/**
+ * @param {http.IncomingMessage} req
+ * @param {http.ServerResponse} res
+ */
 async function tryServeFile(req, res) {
+    try {
+        await simulateAwsEventLambdaEdgeViewerRequest(req, res)
+    } catch (error) {
+        console.error(error)
+    }
+
     try {
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`)
         let filePathRelative = parsedUrl.pathname
