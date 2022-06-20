@@ -37,6 +37,8 @@ async function tryServeFile(req, res) {
         const parsedUrl = new URL(req.url, `http://${req.headers.host}`)
         let filePathRelative = parsedUrl.pathname
 
+        console.log(`${req.method} ${parsedUrl.pathname}`)
+
         if (filePathRelative === "/") {
             filePathRelative = "index.html"
         }
