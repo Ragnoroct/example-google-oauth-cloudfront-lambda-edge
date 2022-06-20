@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Example simple cloudfront auth with google oauth",
   "repository": "github:com/Ragnoroct/example-google-oauth-cloudfront-lambda-edge",
-  "main": "",
+  "type": "module",
   "scripts": {
     "deploy:synth": "cd cdk && ./node_modules/.bin/cdk synth",
     "deploy": "cd cdk && ./node_modules/.bin/cdk synth",
@@ -13,6 +13,7 @@
   "author": "Will Bender",
   "license": "ISC",
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.100",
     "sirv-cli": "^1.0.14"
   }
 }
