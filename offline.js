@@ -4,7 +4,7 @@ import path, { resolve } from "node:path"
 import { URL } from "node:url"
 import { main as handlerMain } from "./handler.js"
 
-startOfflineServer(8080)
+startOfflineServer(5000)
 
 /** @param {number} port */
 function startOfflineServer(port) {
@@ -75,6 +75,19 @@ async function simulateAwsEventLambdaEdgeViewerRequest(req, res) {
     ]
 
     const result = await handlerMain(event, context)
+
+    if (result !== undefined) {
+        for (const headerArray of Object.values(result["headers"])) {
+            const headerName = headerArray[0]["key"]
+            const headerValue = headerArray[0]["value"]
+            console.log(headerName, headerValue)
+            res.setHeader(headerName, headerValue)
+        }
+        const encoding = result["bodyEncoding"] === "base64" ? "base64" : "utf-8"
+        const body = Buffer.from(result["body"], encoding)
+        res.writeHead(result["status"], result["statusDescription"])
+        res.end(body)
+    }
 }
 
 /**
@@ -82,14 +95,22 @@ async function simulateAwsEventLambdaEdgeViewerRequest(req, res) {
  * @param {http.ServerResponse} res
  */
 async function tryServeFile(req, res) {
+    const parsedUrl = new URL(req.url, `http://${req.headers.host}`)
+
     try {
-        await simulateAwsEventLambdaEdgeViewerRequest(req, res)
+        if (parsedUrl.pathname.startsWith("/private")) {
+            await simulateAwsEventLambdaEdgeViewerRequest(req, res)
+        }
     } catch (error) {
         console.error(error)
     }
 
     try {
-        const parsedUrl = new URL(req.url, `http://${req.headers.host}`)
+        // don't process file if response was directly given by handler
+        if (res.writableEnded) {
+            return
+        }
+
         let filePathRelative = parsedUrl.pathname
 
         console.log(`${req.method} ${parsedUrl.pathname}`)

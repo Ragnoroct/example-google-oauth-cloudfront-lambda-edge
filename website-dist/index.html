@@ -12,12 +12,24 @@
             console.log('Name: ' + profile.getName());
             console.log('Image URL: ' + profile.getImageUrl());
             console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+            const authResponse = googleUser.getAuthResponse()
+            if (authResponse) {
+                document.cookie = `CLOUDFRONT_GOOGLE_TOKEN=${authResponse.id_token}; secure; samesite=lax`
+            }
+        }
+        function signOut() {
+            const auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                document.cookie = "CLOUDFRONT_GOOGLE_TOKEN=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            })
         }
     </script>
 </head>
 <body>
     <h2>Example - Cloudfront Google OAuth 2.0</h2>
     <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    <a href="#" onclick="signOut();">Sign out</a>
     <h3>Secret Recipes</h3>
     <a href="/private/recipe-1.html">secret recipe 1</a>
     <a href="/private/recipe-2.html">secret recipe 2</a>
