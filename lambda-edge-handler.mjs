@@ -1,9 +1,8 @@
 import https from "https"
 import crypto from "crypto"
 
-// https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow#oauth-2.0-endpoints_4
-
-const googleClientId = ""
+// Replace with your client id
+const googleClientId = "463482814474-bq5nq9n8kpko0tct4hljs6oni562tg4u.apps.googleusercontent.com"
 
 /**
  * Parse cookie string key value object
@@ -139,6 +138,7 @@ async function authorize(tokenString) {
 /** @type {AWSLambda.CloudFrontRequestHandler} */
 export const main = async (event, context) => {
     try {
+        console.log("viewer request:", event, context)
         const request = event.Records[0].cf.request
         const cookies = parseCookieString(request.headers["cookie"]?.[0]?.["value"] ?? "")
         await authorize(cookies["CLOUDFRONT_GOOGLE_TOKEN"])

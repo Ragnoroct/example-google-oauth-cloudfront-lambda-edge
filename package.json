@@ -5,15 +5,17 @@
   "repository": "github:com/Ragnoroct/example-google-oauth-cloudfront-lambda-edge",
   "type": "module",
   "scripts": {
-    "deploy:synth": "cd cdk && ./node_modules/.bin/cdk synth",
-    "deploy": "cd cdk && ./node_modules/.bin/cdk synth",
+    "cdk:synth": "cd cdk && ./node_modules/.bin/cdk synth",
+    "cdk:deploy": "cd cdk && ./node_modules/.bin/cdk deploy --all",
     "prepare": "cd cdk && npm install",
-    "dev": "sirv public"
+    "offline": "node offline.js"
   },
   "author": "Will Bender",
   "license": "ISC",
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.100",
-    "sirv-cli": "^1.0.14"
+    "@types/aws-lambda": "^8.10.100"
+  },
+  "volta": {
+    "node": "16.15.1"
   }
 }
